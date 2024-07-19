@@ -4,40 +4,28 @@ import java.lang.*;
 
 
 class Main {
-    static int n;
-    static int[] arr;
-    static int min;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        n = Integer.parseInt(br.readLine());
-        arr = new int[50001];
+        int n = Integer.parseInt(br.readLine());
+        int[] dp = new int[n + 1];
 
-        arr[1] = 1;
-        arr[2] = 2;
+        dp[0] = 0;
+        dp[1] = 1;
 
-        for (int i = 3; i <= n; i++) {
-            double tmp = Math.sqrt(i);
-            int isSquareRoot = (int) tmp;
-            if(i == isSquareRoot*isSquareRoot) {
-                arr[i] = 1;
-                continue;
+        int min;
+        for (int i = 2; i <= n; i++) {
+            min = Integer.MAX_VALUE;
+
+            for (int j = 1; j * j <= i; j++) {
+                int tmp = i - (j * j);
+                min = Math.min(min, dp[tmp]);
             }
-            sol(i);
-            arr[i] = min;
+
+            dp[i] = min+1;
         }
 
-        System.out.println(arr[n]);
-    }
-
-    static void sol(int idx) {
-        min = 9999;
-        for (int i = 1; i <= idx / 2; i++){
-            int res = arr[i] + arr[idx - i];
-            if(min > res){
-                min = res;
-            }
-        }
+        System.out.println(dp[n]);
     }
 }
 
