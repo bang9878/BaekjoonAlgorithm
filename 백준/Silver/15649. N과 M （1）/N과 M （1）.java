@@ -11,6 +11,7 @@ class Main {
     static int M;
     static boolean[] visited;
     static int[] result;
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -23,14 +24,16 @@ class Main {
         result = new int[M];
 
         dfs(0);
+        bw.flush();
     }
 
-    private static void dfs(int depth) {
+    private static void dfs(int depth) throws IOException {
         if (depth == M) {
             for (int i = 0; i < M; i++) {
-                System.out.print(result[i] + " ");
+                bw.write(String.valueOf(result[i]));
+                bw.write(" ");
             }
-            System.out.println();
+            bw.write("\n");
             return;
         }
 
