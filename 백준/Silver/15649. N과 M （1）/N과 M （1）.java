@@ -12,7 +12,6 @@ class Main {
     static boolean[] visited;
     static int[] result;
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -29,11 +28,7 @@ class Main {
 
     private static void dfs(int depth) throws IOException {
         if (depth == M) {
-            for (int i = 0; i < M; i++) {
-                bw.write(String.valueOf(result[i]));
-                bw.write(" ");
-            }
-            bw.write("\n");
+            print();
             return;
         }
 
@@ -45,5 +40,13 @@ class Main {
                 visited[i] = false;
             }
         }
+    }
+
+    static void print() throws IOException {
+        for (int i = 0; i < M; i++) {
+            bw.write(String.valueOf(result[i]));
+            bw.write(" ");
+        }
+        bw.write("\n");
     }
 }
