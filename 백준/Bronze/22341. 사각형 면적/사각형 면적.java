@@ -21,14 +21,14 @@ public class Main {
 			int x = Integer.parseInt(st.nextToken());
 			int y = Integer.parseInt(st.nextToken());
 
-			if (x >= curWidth || y >= curHeight) {
+			if (y >= curWidth || x >= curHeight) {
 				continue;
 			}
 
-			if (curWidth * y >= curHeight * x) {
-				curHeight = y;
+			if (curWidth * x >= curHeight * y) {
+				curHeight = x;
 			} else {
-				curWidth = x;
+				curWidth = y;
 			}
 		}
 
