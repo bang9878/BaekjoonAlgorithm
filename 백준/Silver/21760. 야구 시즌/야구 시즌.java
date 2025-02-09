@@ -20,20 +20,27 @@ public class Main {
 			int k = Integer.parseInt(st.nextToken());
 			int D = Integer.parseInt(st.nextToken());
 
-			int B = 1;
-			int A;
 			int sameLeagueCnt = 0;
-			int result = -1;
-			int pow = (int) (Math.pow(M, N));
+			int anotherLeagueCnt = 0;
+
 			for (int i = 1; i < M; i++) {
 				sameLeagueCnt += i;
 			}
+
+			for (int i = 1; i < N; i++) {
+				anotherLeagueCnt += i;
+			}
+
+			int B = 1;
+			int A;
+			int result = -1;
+			int pow = M * M * anotherLeagueCnt;
 
 			while (true) {
 				A = B * k;
 
 				// 다른 지역리그 계산
-				
+
 				int anotherLeague = pow * B;
 
 				// 같은 지역리그 계산
@@ -49,7 +56,7 @@ public class Main {
 				B++;
 
 			}
-			
+
 			System.out.println(result);
 
 		}
