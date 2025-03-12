@@ -4,12 +4,13 @@ import java.util.*;
 public class Main {
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
 		StringTokenizer st = new StringTokenizer(br.readLine());
 
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
 
-		long[] arr = new long[N];
+		int[] arr = new int[N];
 		long min = Integer.MAX_VALUE;
 		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < N; i++) {
@@ -17,7 +18,7 @@ public class Main {
 			min = Math.min(min, arr[i]);
 		}
 
-		long left = 1;
+        long left = 1;
 		long right = min * M;
 
 		while (left + 1 < right) {
