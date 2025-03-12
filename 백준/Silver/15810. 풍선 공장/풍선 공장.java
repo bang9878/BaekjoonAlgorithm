@@ -17,7 +17,7 @@ public class Main {
 			min = Math.min(min, arr[i]);
 		}
 
-		long left = 0;
+		long left = 1;
 		long right = min * M;
 
 		while (left + 1 < right) {
