@@ -14,7 +14,7 @@ public class Main {
 		input();
 		for (int i = 0; i <= 3; i++) {
 			ans = i;
-			dfs(0);
+			dfs(1, 0);
 			if (isAns)
 				break;
 		}
@@ -23,7 +23,7 @@ public class Main {
 
 	}
 
-	public static void dfs(int depth) {
+	public static void dfs(int r, int depth) {
 		if (isAns) {
 			return;
 		}
@@ -35,14 +35,14 @@ public class Main {
 			return;
 		}
 
-		for (int i = 1; i <= H; i++) {
+		for (int i = r; i <= H; i++) {
 			for (int j = 1; j < N; j++) {
 				if (map[i][j] == 0 && map[i][j + 1] == 0) {
 
 					map[i][j] = 1;
 					map[i][j + 1] = 2;
 
-					dfs(depth + 1);
+					dfs(i, depth + 1);
 
 					map[i][j] = 0;
 					map[i][j + 1] = 0;
