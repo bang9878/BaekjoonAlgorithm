@@ -20,15 +20,19 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		input();
 
-		int[][] cloneMap = new int[N][N];
+        boolean[][] visited = new boolean[N][N];
 
 		while (true) {
 			isOpen = false;
-			boolean[][] visited = new boolean[N][N];
+            
+            for(int i = 0; i < N; i++) {
+                Arrays.fill(visited[i], false);
+            }
+			
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
 					if (!visited[i][j])
-						bfs(visited, i, j, cloneMap);
+						bfs(visited, i, j);
 				}
 			}
 
@@ -37,18 +41,11 @@ public class Main {
 				return;
 			}
 			++ans;
-
-			// 결과 맵 복사
-			for (int i = 0; i < N; i++) {
-				for (int j = 0; j < N; j++) {
-					map[i][j] = cloneMap[i][j];
-				}
-			}
 		}
 
 	}
 
-	public static void bfs(boolean[][] visited, int r, int c, int[][] cloneMap) {
+	public static void bfs(boolean[][] visited, int r, int c) {
 
 		Queue<Country> q = new LinkedList<>();
 		q.add(new Country(r, c, map[r][c]));
@@ -84,7 +81,7 @@ public class Main {
 
 		int calcPop = sum / share.size();
 		for (Country country : share) {
-			cloneMap[country.r][country.c] = calcPop;
+			map[country.r][country.c] = calcPop;
 		}
 
 	}
