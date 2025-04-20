@@ -44,16 +44,14 @@ public class Main {
 			}
 
 			// 하나 추가
-			if (visited[sushi[idx]] == 0) {
+			if (++visited[sushi[idx]] == 1) {
 				init++;
 			}
-			visited[sushi[idx]]++;
 
 			// 하나 빼기
-			if (visited[sushi[i - 1]] == 1) {
+			if (--visited[sushi[i - 1]] == 0) {
 				init--;
 			}
-			visited[sushi[i - 1]]--;
 
 			max = Math.max(max, init);
 		}
