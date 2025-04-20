@@ -38,10 +38,9 @@ public class Main {
 		int idx = -1;
 		int max = init;
 		for (int i = 1; i < N; i++) {
-			if ((i + K - 1) >= N) {
+			idx = i + K - 1;
+			if (idx >= N) {
 				idx = (i + K - 1) % N;
-			} else {
-				idx = i + K - 1;
 			}
 
 			// 하나 추가
