@@ -21,14 +21,14 @@ public class Main {
     }
 
     static void bfs() {
-        Queue<Node> q = new LinkedList<>();
+        PriorityQueue<Node> q = new PriorityQueue<>();
         boolean[] visited = new boolean[100001];
         visited[N] = true;
         q.add(new Node(N, 0));
 
         while (!q.isEmpty()) {
             Node cur = q.poll();
-            
+
             visited[cur.pos] = true;
 
             if (cur.pos == K) {
@@ -61,7 +61,7 @@ public class Main {
     }
 }
 
-class Node {
+class Node implements Comparable<Node> {
     int pos;
     int time;
 
@@ -70,8 +70,8 @@ class Node {
         this.time = time;
     }
 
-//    @Override
-//    public int compareTo(Node o) {
-//        return Integer.compare(this.time, o.time);
-//    }
+    @Override
+    public int compareTo(Node o) {
+        return Integer.compare(this.time, o.time);
+    }
 }
