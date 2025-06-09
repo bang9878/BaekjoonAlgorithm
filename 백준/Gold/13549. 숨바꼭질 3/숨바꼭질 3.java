@@ -21,32 +21,32 @@ public class Main {
     }
 
     static void bfs() {
-        PriorityQueue<Node> q = new PriorityQueue<>();
-        boolean[][] visited = new boolean[100001][3];
-        visited[N][0] = true;
-        visited[N][1] = true;
-        visited[N][2] = true;
+        Queue<Node> q = new LinkedList<>();
+        boolean[] visited = new boolean[100001];
+        visited[N] = true;
         q.add(new Node(N, 0));
 
         while (!q.isEmpty()) {
             Node cur = q.poll();
+            
+            visited[cur.pos] = true;
 
             if (cur.pos == K) {
                 ans = Math.min(ans, cur.time);
             }
 
-            if (isIn(cur.pos * 2) && !visited[cur.pos * 2][2]) {
-                visited[cur.pos * 2][2] = true;
+            if (isIn(cur.pos * 2) && !visited[cur.pos * 2]) {
+//                visited[cur.pos * 2] = true;
                 q.add(new Node(cur.pos * 2, cur.time));
             }
 
-            if (isIn(cur.pos + 1) && !visited[cur.pos + 1][0]) {
-                visited[cur.pos + 1][0] = true;
+            if (isIn(cur.pos + 1) && !visited[cur.pos + 1]) {
+//                visited[cur.pos + 1] = true;
                 q.add(new Node(cur.pos + 1, cur.time + 1));
             }
 
-            if (isIn(cur.pos - 1) && !visited[cur.pos - 1][1]) {
-                visited[cur.pos - 1][1] = true;
+            if (isIn(cur.pos - 1) && !visited[cur.pos - 1]) {
+//                visited[cur.pos - 1] = true;
                 q.add(new Node(cur.pos - 1, cur.time + 1));
             }
 
@@ -61,7 +61,7 @@ public class Main {
     }
 }
 
-class Node implements Comparable<Node> {
+class Node {
     int pos;
     int time;
 
@@ -70,8 +70,8 @@ class Node implements Comparable<Node> {
         this.time = time;
     }
 
-    @Override
-    public int compareTo(Node o) {
-        return Integer.compare(this.time, o.time);
-    }
+//    @Override
+//    public int compareTo(Node o) {
+//        return Integer.compare(this.time, o.time);
+//    }
 }
