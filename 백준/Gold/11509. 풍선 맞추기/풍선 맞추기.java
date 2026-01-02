@@ -1,70 +1,32 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-
-    static int N;
-
-    static List<Integer> bundles = new ArrayList<>();
-    static Map<Integer, Queue<Integer>> candidateMap = new HashMap<>(); // key : 마지막 원소의 높이, value idx 후보들
-
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
+        int N = Integer.parseInt(br.readLine());
 
-        N = Integer.parseInt(br.readLine());
-        st = new StringTokenizer(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        // arrows[h] = 높이 h에서 "다음 풍선"을 기다리는 화살 개수
+        // (즉, 지금 높이 h 풍선을 맞출 수 있는 화살 개수)
+        // 풍선을 맞추면 화살은 h-1을 기다리게 됨.
+        int[] arrows = new int[1_000_002]; // 높이는 <= 1,000,000
+
+        int answer = 0;
+
         for (int i = 0; i < N; i++) {
             int h = Integer.parseInt(st.nextToken());
 
-            // 넣을 수 있는 곳이 있다면?
-            if (candidateMap.containsKey(h + 1)) {
-                Queue<Integer> queue = candidateMap.get(h + 1);
-                if (queue.isEmpty()) {
-                    bundles.add(h);
-                    // 후보군 추가
-                    if (candidateMap.containsKey(h)) {
-                        candidateMap.get(h).add(bundles.size() - 1);
-                    } else {
-                        Queue<Integer> newQueue = new LinkedList<>();
-                        newQueue.add(bundles.size() - 1);
-                        candidateMap.put(h, newQueue);
-                    }
-                    continue;
-                }
-                int idx  = queue.poll();
-                if (candidateMap.containsKey(h)) {
-                    candidateMap.get(h).add(idx);
-                } else {
-                    Queue<Integer> newQueue = new LinkedList<>();
-                    newQueue.add(idx);
-                    candidateMap.put(h, newQueue);
-                }
-            } else { // 없으면 그냥 새로 넣으면 됨
-                bundles.add(h);
-                if (candidateMap.containsKey(h)) {
-                    candidateMap.get(h)
-                            .add(bundles.size() - 1);
-                } else {
-                    Queue<Integer> q = new LinkedList<>();
-                    q.add(bundles.size() - 1);
-                    candidateMap.put(h, q);
-                }
-
+            if (arrows[h] > 0) {        // 기존 화살이 h를 기다리고 있으면 사용
+                arrows[h]--;
+            } else {                    // 없으면 새 화살 발사
+                answer++;
             }
+
+            arrows[h - 1]++;            // 맞춘 후 화살은 h-1을 기다림
         }
 
-        System.out.println(bundles.size());
-
+        System.out.println(answer);
     }
 }
