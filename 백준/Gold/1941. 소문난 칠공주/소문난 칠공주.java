@@ -26,11 +26,16 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         input();
-        combination(0, 0, new boolean[5][5]);
+        combination(0, 0, 0, new boolean[5][5]);
         System.out.println(ans);
     }
 
-    static void combination(int start, int depth, boolean[][] selected) {
+    static void combination(int start, int depth, int doyeonCnt, boolean[][] selected) {
+        if (doyeonCnt > 3) {
+            return;
+        }
+
+
         if (depth == 7) {
             for (int i = 0; i < 5; i++) {
                 for (int j = 0; j < 5; j++) {
@@ -49,7 +54,12 @@ public class Main {
 
             if (!selected[r][c]) {
                 selected[r][c] = true;
-                combination(i + 1, depth + 1, selected);
+                if (classes[r][c] == 'Y') {
+                    combination(i + 1, depth + 1, doyeonCnt + 1, selected);
+                } else {
+                    combination(i + 1, depth + 1, doyeonCnt, selected);
+                }
+
                 selected[r][c] = false;
             }
         }
@@ -61,15 +71,13 @@ public class Main {
         q.add(new Pos(startR, startC));
         visited[startR][startC] = true;
 
-        int dasomeCnt = 0;
-        int doyeonCnt = 0;
+        int cnt = 1;
         while (!q.isEmpty()) {
             Pos cur = q.poll();
 
-            if (classes[cur.r][cur.c] == 'Y') {
-                doyeonCnt++;
-            } else {
-                dasomeCnt++;
+            if (cnt == 7) {
+                ans++;
+                return;
             }
 
             for (int d = 0; d < 4; d++) {
@@ -77,15 +85,10 @@ public class Main {
                 int nextC = cur.c + dirC[d];
 
                 if(!isIn(nextR, nextC) || visited[nextR][nextC] || !selected[nextR][nextC]) continue;
-
+                cnt++;
                 visited[nextR][nextC] = true;
                 q.add(new Pos(nextR, nextC));
             }
-        }
-
-        // 문제의 조건을 만족한 경우
-        if (doyeonCnt + dasomeCnt == 7 && dasomeCnt >= 4) {
-            ans++;
         }
     }
 
