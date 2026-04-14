@@ -9,19 +9,19 @@ public class Main {
 
     static int R, C;
     static char[][] map;
-    static boolean[][] visited;
-
+    static int[][] groupIDArr;
     static int[] dirR = {-1, 1, 0, 0};
     static int[] dirC = {0, 0, -1, 1};
     static int answer = 0;
-    static Map<String, Boolean> info = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
         input();
+
+        int groupID = 0;
         for (int i = 0; i < R; i++) {
             for (int j = 0; j < C; j++) {
-                if (!visited[i][j]) {
-                    search(i, j);
+                if (groupIDArr[i][j] == 0) {
+                    search(i, j, ++groupID);
                 }
             }
         }
@@ -30,27 +30,26 @@ public class Main {
 
     }
 
-    static void search(int r, int c) {
+    static void search(int r, int c, int markNo) {
         int curR = r;
         int curC =c;
         while (true) {
 
-            if (info.containsKey(String.valueOf(curR) + curC)) {
+            if (groupIDArr[curR][curC] > 0 && groupIDArr[curR][curC] == markNo) {
+                // 자기 자신 싸이클 발견
                 answer++;
                 break;
-            }
-
-            if (visited[curR][curC]) {
+            } else if (groupIDArr[curR][curC] > 0 && groupIDArr[curR][curC] != markNo) {
                 break;
             }
 
-            info.put(String.valueOf(curR) + curC, true);
-            visited[curR][curC] = true;
+
+            groupIDArr[curR][curC] = markNo;
             int dirIdx = getDirIdx(map[curR][curC]);
             curR = curR + dirR[dirIdx];
             curC = curC + dirC[dirIdx];
         }
-        info.clear();
+
     }
 
     static int getDirIdx(char cmd) {
@@ -74,7 +73,7 @@ public class Main {
         C = Integer.parseInt(st.nextToken());
 
         map = new char[R][C];
-        visited = new boolean[R][C];
+        groupIDArr = new int[R][C];
         for (int i = 0; i < R; i++) {
             map[i] = br.readLine().toCharArray();
         }
