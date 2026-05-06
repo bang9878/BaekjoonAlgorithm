@@ -1,9 +1,5 @@
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.ArrayDeque;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
@@ -15,74 +11,57 @@ class Solution {
     int[] dirR = {-1, 1, 0, 0};
     int[] dirC = {0, 0, -1, 1};
     boolean[][] visited;
-    int[][] groupArr;
-    Map<Integer, Integer> groupValMap = new HashMap<>();
+    int[] totalSumColArr;
     int R;
     int C;
 
     public int solution(int[][] land) {
-        int answer = 0;
-
         R = land.length;
         C = land[0].length;
         visited = new boolean[R][C];
-        groupArr = new int[R][C];
-        int groupId = 0;
+        totalSumColArr = new int[C];
         for (int i = 0; i < R; i++) {
             for (int j = 0; j < C; j++) {
                 if (land[i][j] == OIL && !visited[i][j]) {
-                    bfs(i, j, land, ++groupId);
+                    bfs(i, j, land);
                 }
             }
         }
 
-        Set<Integer> set = new HashSet<>();
-        for (int j = 0; j < C; j++) {
-            for (int i = 0; i < R; i++) {
-                if (groupArr[i][j] != 0) {
-                    set.add(groupArr[i][j]);
-                }
-            }
-
-            int sum = 0;
-            for (int id : set) {
-                sum += groupValMap.get(id);
-            }
-            set.clear();
-            answer = Math.max(answer, sum);
+        int max = 0;
+        for (int i = 0; i < C; i++) {
+            max = Math.max(max, totalSumColArr[i]);
         }
 
-        return answer;
+        return max;
     }
 
-    private void bfs(int r, int c, int[][] land, int groupId) {
-        Queue<Pos> q = new LinkedList<>();
-        List<Pos> lump = new ArrayList<>();
+    private void bfs(int r, int c, int[][] land) {
+        Queue<Pos> q = new ArrayDeque<>();
         visited[r][c] = true;
-        Pos now = new Pos(r, c);
-        q.add(now);
-        lump.add(now);
+        q.add(new Pos(r, c));
+        Set<Integer> visitedColIdx = new HashSet<>();
         int cnt = 1;
         while (!q.isEmpty()) {
             Pos cur = q.poll();
+
+            visitedColIdx.add(cur.c);
 
             for (int d = 0; d < 4; d++) {
                 int nextR = cur.r + dirR[d];
                 int nextC = cur.c + dirC[d];
 
-                if (!isIn(nextR, nextC) || visited[nextR][nextC] || land[nextR][nextC] == 0) continue;
+                if (!isIn(nextR, nextC) || visited[nextR][nextC] || land[nextR][nextC] == EMPTY) continue;
 
                 visited[nextR][nextC] = true;
                 Pos pos = new Pos(nextR, nextC);
                 q.offer(pos);
-                lump.add(pos);
                 cnt++;
             }
         }
 
-        groupValMap.put(groupId, cnt);
-        for (Pos pos : lump) {
-            groupArr[pos.r][pos.c] = groupId;
+        for (int idx : visitedColIdx) {
+            totalSumColArr[idx] += cnt;
         }
 
     }
