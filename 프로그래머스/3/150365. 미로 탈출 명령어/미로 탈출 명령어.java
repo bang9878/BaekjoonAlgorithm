@@ -3,56 +3,86 @@ import java.util.Queue;
 
 class Solution {
 
-    public String solution(int n, int m, int x, int y, int r, int c, int k) {
-        String answer = "";
+    private static final int[] DR = {1, 0, 0, -1};
+    private static final int[] DC = {0, -1, 1, 0};
+    private static final String[] CMD = {"d", "l", "r", "u"};
 
-        boolean[][][] visited = new boolean[n + 1][m + 1][k  + 1];
-        Queue<Node> q = new ArrayDeque<>();
-        q.add(new Node(x, y, 0, ""));
+    public String solution(int n, int m, int x, int y, int r, int c, int k) {
+        int minDist = getDistance(x, y, r, c);
+
+        if (minDist > k || (k - minDist) % 2 != 0) {
+            return "impossible";
+        }
+
+        boolean[][][] visited = new boolean[n + 1][m + 1][k + 1];
+        Queue<Node> queue = new ArrayDeque<>();
+
+        queue.offer(new Node(x, y, 0, ""));
         visited[x][y][0] = true;
 
-        // 하좌우상
-        int[] dirR = {1, 0, 0, -1};
-        int[] dirC = {0, -1, 1, 0};
-        String[] cmdArr = {"d", "l", "r", "u"};
-        while (!q.isEmpty()) {
-            Node cur = q.poll();
+        while (!queue.isEmpty()) {
+            Node cur = queue.poll();
 
-            if (cur.r == r && cur.c == c && cur.cost == k) {
-                return cur.cmd;
+            if (cur.row == r && cur.col == c && cur.depth == k) {
+                return cur.path;
             }
 
-            for (int i = 0; i < 4; i++) {
-                int nextR = cur.r + dirR[i];
-                int nextC = cur.c + dirC[i];
+            for (int dir = 0; dir < 4; dir++) {
+                int nextRow = cur.row + DR[dir];
+                int nextCol = cur.col + DC[dir];
+                int nextDepth = cur.depth + 1;
 
-                if(!isIn(nextR, nextC, n, m) || cur.cost + 1 > k || visited[nextR][nextC][cur.cost + 1]) continue;
+                if (!isInRange(nextRow, nextCol, n, m)) {
+                    continue;
+                }
 
-                q.offer(new Node(nextR, nextC, cur.cost + 1, cur.cmd + cmdArr[i]));
-                visited[nextR][nextC][cur.cost + 1] = true;
+                if (nextDepth > k) {
+                    continue;
+                }
+
+                if (visited[nextRow][nextCol][nextDepth]) {
+                    continue;
+                }
+
+                int remain = k - nextDepth;
+                int dist = getDistance(nextRow, nextCol, r, c);
+
+                if (dist > remain || (remain - dist) % 2 != 0) {
+                    continue;
+                }
+
+                visited[nextRow][nextCol][nextDepth] = true;
+                queue.offer(new Node(
+                        nextRow,
+                        nextCol,
+                        nextDepth,
+                        cur.path + CMD[dir]
+                ));
             }
-
         }
 
         return "impossible";
     }
 
-    private boolean isIn(int r, int c, int R, int C) {
-        return 0 < r && r <= R && 0 < c && c <= C;
+    private int getDistance(int row1, int col1, int row2, int col2) {
+        return Math.abs(row1 - row2) + Math.abs(col1 - col2);
     }
-}
 
-class Node {
+    private boolean isInRange(int row, int col, int n, int m) {
+        return 1 <= row && row <= n && 1 <= col && col <= m;
+    }
 
-    int r;
-    int c;
-    int cost;
-    String cmd;
+    private static class Node {
+        int row;
+        int col;
+        int depth;
+        String path;
 
-    public Node(int r, int c, int cost, String cmd) {
-        this.r = r;
-        this.c = c;
-        this.cost = cost;
-        this.cmd = cmd;
+        Node(int row, int col, int depth, String path) {
+            this.row = row;
+            this.col = col;
+            this.depth = depth;
+            this.path = path;
+        }
     }
 }
