@@ -1,7 +1,5 @@
 import java.util.ArrayDeque;
 import java.util.Queue;
-import java.util.Set;
-import java.util.TreeSet;
 
 class Solution {
 
@@ -9,7 +7,6 @@ class Solution {
         String answer = "";
 
         boolean[][][] visited = new boolean[n + 1][m + 1][k  + 1];
-        Set<String> candidate = new TreeSet<>();
         Queue<Node> q = new ArrayDeque<>();
         q.add(new Node(x, y, 0, ""));
         visited[x][y][0] = true;
@@ -18,13 +15,11 @@ class Solution {
         int[] dirR = {1, 0, 0, -1};
         int[] dirC = {0, -1, 1, 0};
         String[] cmdArr = {"d", "l", "r", "u"};
-        boolean isImpossible = true;
         while (!q.isEmpty()) {
             Node cur = q.poll();
 
             if (cur.r == r && cur.c == c && cur.cost == k) {
-                isImpossible = false;
-                candidate.add(cur.cmd);
+                return cur.cmd;
             }
 
             for (int i = 0; i < 4; i++) {
@@ -39,15 +34,7 @@ class Solution {
 
         }
 
-        if (!isImpossible) {
-            answer = candidate.stream()
-                    .findFirst()
-                    .get();
-        } else {
-            answer = "impossible";
-        }
-
-        return answer;
+        return "impossible";
     }
 
     private boolean isIn(int r, int c, int R, int C) {
